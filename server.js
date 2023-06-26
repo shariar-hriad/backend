@@ -14,10 +14,10 @@ app.use(bodyParser.json())
 app.use(helment())
 app.use(cors())
 
-// app.get('/', (req, res, next) => {
-//     res.status(200).json({ message: 'Welcome to the App' })
-//     next()
-// })
+app.get('/', (req, res, next) => {
+    res.status(200).json({ message: 'Welcome to the App' })
+    next()
+})
 
 app.use('/api/v1/', routes)
 
