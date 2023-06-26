@@ -6,10 +6,7 @@ export const getTotalCustomer = async (req, res) => {
     try {
         const total = await Customer.countDocuments()
 
-        res.status(200).json({
-            sucess: true,
-            total: total,
-        })
+        res.status(200).json(total)
     } catch (error) {
         console.log(error)
     }
@@ -44,7 +41,7 @@ export const getAllCustomer = async (req, res) => {
 
         if (customer.length === 0) return res.status(404).json({ success: false, message: 'Customer not found' })
 
-        res.status(200).json({ customer })
+        res.status(200).json(customer)
     } catch (error) {
         console.log(error)
     }
