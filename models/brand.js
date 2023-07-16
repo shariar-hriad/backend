@@ -1,16 +1,18 @@
-import mongoose from 'mongoose'
-
-const Schema = mongoose.Schema
+import { Schema, model } from 'mongoose'
 
 const BrandSchema = new Schema(
     {
-        title: String,
+        title: {
+            type: String,
+            unique: true,
+            index: true,
+        },
     },
     {
         timestamps: true,
     }
 )
 
-const Brand = mongoose.model('Brand', BrandSchema)
+const Brand = model('Brand', BrandSchema)
 
 export default Brand

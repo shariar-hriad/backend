@@ -11,6 +11,7 @@ const CustomerSchema = new Schema(
         phoneNumber: {
             type: String,
             required: true,
+            unique: true,
         },
         purchasedProduct: {
             type: Schema.Types.ObjectId,
@@ -18,6 +19,7 @@ const CustomerSchema = new Schema(
         },
         address: {
             type: String,
+            default: '',
         },
     },
     {

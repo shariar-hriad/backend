@@ -1,4 +1,5 @@
 import bodyParser from 'body-parser'
+import cookieParser from 'cookie-parser'
 import cors from 'cors'
 import dotenv from 'dotenv'
 import express from 'express'
@@ -6,16 +7,18 @@ import helmet from 'helmet'
 import mongoose from 'mongoose'
 import morgan from 'morgan'
 
+import { errorHandler, notFound } from './middleware/errorHandler.js'
 import routes from './routes/index.js'
 
 dotenv.config()
 const app = express()
+app.use(cookieParser())
 app.use(express.json())
 app.use(helmet())
 app.use(helmet.crossOriginResourcePolicy({ policy: 'cross-origin' }))
-app.use(morgan('common'))
+app.use(morgan('dev'))
 app.use(bodyParser.json())
-app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.urlencoded({ extended: true }))
 app.use(cors())
 
 app.get('/', (req, res, next) => {
@@ -25,8 +28,12 @@ app.get('/', (req, res, next) => {
 
 app.use('/api/v1/', routes)
 
-const port = process.env.PORT || '5001'
+// error handler
+app.use(notFound)
+app.use(errorHandler)
 
+const port = process.env.PORT || '5001'
+mongoose.set('strictQuery', false)
 mongoose
     .connect(process.env.MONGODB_URI, {
         useNewUrlParser: true,
