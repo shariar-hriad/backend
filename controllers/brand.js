@@ -5,11 +5,12 @@ import { validateMongoId } from '../utils/validateMongoId.js'
 // get all brand
 export const getBrand = asyncHandler(async (req, res) => {
     try {
-        const brand = await Brand.find()
+        const brands = await Brand.find()
+        const brandsLenght = await Brand.countDocuments()
 
-        if (!brand.length) return res.status(404).json({ success: false, message: 'brand not found' })
+        if (!brands) return res.status(404).json({ success: false, message: 'brand not found' })
 
-        res.status(200).json(brand)
+        res.status(200).json({ brands, brandsLenght })
     } catch (err) {
         console.log(err)
     }

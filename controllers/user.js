@@ -116,9 +116,12 @@ export const logout = asyncHandler(async (req, res) => {
 })
 
 // create a new order
-export const createOrder = asyncHandler(async (req, res) => {
+const createOrder = asyncHandler(async (req, res) => {
     try {
-    } catch (err) {
-        throw new Error(err)
+        const { COD, phoneNumber } = req.body
+
+        // check if the user is exists or not
+    } catch (error) {
+        throw new Error(error)
     }
 })

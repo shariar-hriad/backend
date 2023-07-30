@@ -1,18 +1,11 @@
 import express from 'express'
-import {
-    createCustomer,
-    deleteCustomer,
-    getAllCustomer,
-    getTotalCustomer,
-    updateCustomer,
-} from '../controllers/customer.js'
+import { createCustomer, deleteCustomer, getCustomers, updateCustomer } from '../controllers/customer.js'
 import { authMiddleware } from '../middleware/authMiddleware.js'
 
 const router = express.Router()
 
-router.get('/total', getTotalCustomer)
+router.get('/all', getCustomers)
 router.post('/createCustomer', authMiddleware, createCustomer)
-router.get('/allCustomer', getAllCustomer)
 router.patch('/updateCustomer/:id', authMiddleware, updateCustomer)
 router.delete('/deleteCustomer/:id', authMiddleware, deleteCustomer)
 

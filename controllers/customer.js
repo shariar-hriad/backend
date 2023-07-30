@@ -2,13 +2,36 @@ import Customer from '../models/customer.js'
 import { validateMongoId } from '../utils/validateMongoId.js'
 
 // customer length
-export const getTotalCustomer = async (req, res) => {
+export const getCustomers = async (req, res) => {
     try {
-        const total = await Customer.countDocuments()
+        const page = Number(req.query.page) || 1
+        const pageSize = Number(req.query.pageSize) || 5
+        // const sort = req.query.sort || null
+        const search = req.query.search || ''
 
-        res.status(200).json(total)
+        // console.log(page, pageSize, search)
+
+        const searchRegex = new RegExp('.*' + search + '.*', 'i')
+
+        const filter = {
+            $or: [{ name: { $regex: searchRegex } }, { phoneNumber: { $regex: searchRegex } }],
+        }
+        // query all the customers
+        const customers = await Customer.find(filter)
+            .limit(pageSize * 1)
+            .skip((page - 1) * pageSize)
+            .sort({ createdAt: -1 })
+
+        const customersLenght = await Customer.countDocuments()
+
+        if (!customers) res.status(404).json({ message: 'No Customers Found' })
+
+        res.status(200).json({
+            customers,
+            customersLenght,
+        })
     } catch (error) {
-        console.log(error)
+        throw new Error(error.message)
     }
 }
 
@@ -27,19 +50,6 @@ export const createCustomer = async (req, res) => {
         const newCustomer = await Customer.create({ name, phoneNumber, address })
 
         res.status(201).json(newCustomer)
-    } catch (error) {
-        console.log(error)
-    }
-}
-
-// get all customer
-export const getAllCustomer = async (req, res) => {
-    try {
-        const customer = await Customer.find()
-
-        if (customer.length === 0) return res.status(404).json({ success: false, message: 'Customer not found' })
-
-        res.status(200).json(customer)
     } catch (error) {
         console.log(error)
     }

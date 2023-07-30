@@ -33,8 +33,9 @@ export const getProducts = asyncHandler(async (req, res) => {
         }
 
         const products = await Product.find(filter)
+        const productsLenght = await Product.countDocuments()
 
-        res.status(200).json(products)
+        res.status(200).json({ products, productsLenght })
     } catch (error) {
         throw new Error(error)
     }
@@ -71,11 +72,11 @@ export const updateProduct = asyncHandler(async (req, res) => {
 // delete product
 export const deleteProduct = asyncHandler(async (req, res) => {
     try {
-        const id = req.params
+        const { id } = req.params
         validateMongoId(id)
 
-        const product = await Product.findByIdAndDelete(id, { new: true })
-        res.status(204).json(product)
+        await Product.findByIdAndDelete({ _id: id }, { new: true })
+        res.status(204).json({ message: 'Product deleted successfully' })
     } catch (error) {
         throw new Error(error)
     }
